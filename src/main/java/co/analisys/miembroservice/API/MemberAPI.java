@@ -5,6 +5,7 @@ import co.analisys.miembroservice.model.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -16,6 +17,7 @@ public interface MemberAPI {
     String BASE_URL = "/members";
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(
             summary = "Crear un nuevo miembro",
             description = "Este endpoint permite crear un nuevo miembro proporcionando los detalles en el cuerpo de la solicitud."
@@ -28,6 +30,7 @@ public interface MemberAPI {
     Member createMember(@RequestBody CreateMemberDTO member);
 
     @GetMapping("/{memberId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TRAINER')")
     @Operation(
             summary = "Obtener miembro por ID",
             description = "Este endpoint permite obtener los detalles de un miembro proporcionando su ID."
@@ -40,6 +43,7 @@ public interface MemberAPI {
     Member getMemberById(@PathVariable String memberId);
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TRAINER')")
     @Operation(
             summary = "Obtener todos los miembros",
             description = "Este endpoint permite obtener una lista de todos los miembros registrados."
@@ -51,6 +55,7 @@ public interface MemberAPI {
     List<Member> getAllMembers();
 
     @PutMapping("/{memberId}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_TRAINER')")
     @Operation(
             summary = "Actualizar suscripción de un miembro",
             description = "Este endpoint permite actualizar la suscripción de un miembro proporcionando su ID."
